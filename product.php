@@ -10,7 +10,7 @@ $st = $db->prepare("SELECT * FROM product_sizes WHERE product_id=? ORDER BY id")
 head($p['name'], 'college.php?id=' . (int)$p['college_id']);
 ?>
 <section class="product-detail card">
-  <div class="detail-visual"><span class="product-category"><?= e($p['category']) ?></span><span class="detail-monogram"><?= e(substr($p['college_code'],0,1)) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></div>
+  <div class="detail-visual"><img src="<?= BASE ?>/assets/merch-<?= e(strtolower($p['category'])) ?>.jpg" alt="<?= e($p['name']) ?>" class="detail-photo"><span class="product-category"><?= e($p['category']) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></div>
   <div class="detail-copy"><p class="eyebrow"><?= e($p['college_code']) ?><?= $p['course_name'] ? ' · '.e($p['course_name']) : '' ?> · <?= e($p['category']) ?></p><h1><?= e($p['name']) ?></h1>
   <strong class="detail-price"><?= money($p['price']) ?></strong>
   <p class="detail-description"><?= e($p['description']) ?></p>

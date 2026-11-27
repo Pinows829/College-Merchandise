@@ -31,7 +31,7 @@ head($college['code'] . ' Merchandise', 'index.php');
 <div class="grid">
   <?php while ($p = $products->fetch_assoc()): ?>
     <div class="card product-card">
-      <a class="product-visual" href="product.php?id=<?= (int)$p['id'] ?>"><span class="product-category"><?= e($p['category']) ?></span><span class="product-mark"><?= e(substr($college['code'],0,1)) ?></span><span class="product-college"><?= e($college['code']) ?> COLLECTION</span></a>
+      <a class="product-visual" href="product.php?id=<?= (int)$p['id'] ?>"><img src="<?= BASE ?>/assets/merch-<?= e(strtolower($p['category'])) ?>.jpg" alt="" loading="lazy"><span class="product-category"><?= e($p['category']) ?></span><span class="product-college"><?= e($college['code']) ?> COLLECTION</span></a>
       <div class="product-info"><small><?= e($college['code']) ?><?= $p['course_name'] ? ' · '.e($p['course_name']) : '' ?> · <?= e($p['category']) ?></small><b><?= e($p['name']) ?></b><div class="product-bottom"><strong><?= money($p['price']) ?></strong><a class="round-link" aria-label="View <?= e($p['name']) ?>" href="product.php?id=<?= (int)$p['id'] ?>">↗</a></div></div>
     </div>
   <?php endwhile; ?>

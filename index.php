@@ -11,7 +11,7 @@ $products = $st->get_result();
 
 head('College Merchandise');
 ?>
-<section class="hero-panel"><div class="hero-copy"><p class="eyebrow">YOUR CAMPUS. YOUR PRIDE.</p><h1>Wear your<br><span>college spirit.</span></h1><p>Find official college merchandise made for campus life.</p><a class="btn" href="#catalog">Explore the collection <span aria-hidden="true">→</span></a></div><div class="hero-art" aria-hidden="true"><div class="hero-circle"><span>CM</span></div><i class="spark spark-one">✦</i><i class="spark spark-two">✦</i><span class="hero-note">Made for<br>campus days</span></div></section>
+<section class="hero-panel"><div class="hero-copy"><p class="eyebrow">YOUR CAMPUS. YOUR PRIDE.</p><h1>Wear your<br><span>college spirit.</span></h1><p>Find official college merchandise made for campus life.</p><a class="btn" href="#catalog">Explore the collection <span aria-hidden="true">→</span></a></div></section>
 <form class="search-form" role="search"><span class="search-icon" aria-hidden="true">⌕</span><input name="q" value="<?= e($q) ?>" placeholder="Search shirts, hoodies, accessories..." aria-label="Search products"><button type="submit">Search</button></form>
 
 <?php if (!$q): ?>
@@ -27,7 +27,7 @@ head('College Merchandise');
 <div class="grid">
   <?php while ($p = $products->fetch_assoc()): ?>
     <div class="card product-card">
-      <a class="product-visual" href="product.php?id=<?= (int)$p['id'] ?>"><span class="product-category"><?= e($p['category']) ?></span><span class="product-mark"><?= e(substr($p['college_code'],0,1)) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></a>
+      <a class="product-visual" href="product.php?id=<?= (int)$p['id'] ?>"><img src="<?= BASE ?>/assets/merch-<?= e(strtolower($p['category'])) ?>.jpg" alt="" loading="lazy"><span class="product-category"><?= e($p['category']) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></a>
       <div class="product-info"><small><?= e($p['college_code']) ?><?= $p['course_name'] ? ' · '.e($p['course_name']) : '' ?> · <?= e($p['category']) ?></small><b><?= e($p['name']) ?></b><div class="product-bottom"><strong><?= money($p['price']) ?></strong><a class="round-link" aria-label="View <?= e($p['name']) ?>" href="product.php?id=<?= (int)$p['id'] ?>">↗</a></div></div>
     </div>
   <?php endwhile; ?>
