@@ -2,6 +2,18 @@
 
 A PHP and MySQL college merchandise storefront with student accounts, inventory-aware carts, checkout, order tracking, and an admin dashboard.
 
+## Laravel version
+
+A Laravel 12 conversion is available in [`laravel-app/`](laravel-app/README.md). The original PHP pages remain in this folder. The Laravel version uses the existing `merch_db` database and has its own setup and administrator instructions.
+
+To preview the Laravel version with XAMPP PHP, run this from `laravel-app/`:
+
+```bash
+/Applications/XAMPP/bin/php -S 127.0.0.1:8083 -t public
+```
+
+Then open <http://127.0.0.1:8083>.
+
 ## Run locally with XAMPP
 
 1. Start **Apache** and **MySQL** in the XAMPP Control Panel.
@@ -32,6 +44,6 @@ Log out and log back in. The admin account opens the dashboard and can manage pr
 - Create and edit products, manage sizes and inventory, and update order status.
 - Add course collections and assign products to a specific course or the whole college.
 
-GCash is recorded as a payment method and reference number; this project does not connect to a payment gateway. The shop's product artwork is generated with CSS until real product photos are added.
+GCash is recorded as a payment method and reference number; this project does not connect to a payment gateway. Generated merchandise mockups are used for product imagery.
 
 The supplied course catalog includes the CCICT programs confirmed in the provided list. BSCS and Data Science were left out because they were marked as unverified; you can add them later from **Admin → Courses** if they are confirmed.
