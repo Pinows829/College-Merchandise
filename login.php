@@ -1,5 +1,5 @@
 <?php
-include '../Includes/db.php';
+require_once __DIR__ . '/db.php';
 $err = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $st->get_result()->fetch_assoc();
 
     if ($user && password_verify($_POST['password'], $user['password'])) {
+        session_regenerate_id(true);
         unset($user['password']);          // don't keep the hash in the session
         $_SESSION['u'] = $user;            // this is what "logged in" means
         go(home_for($user['role']));

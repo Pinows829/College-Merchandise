@@ -1,5 +1,5 @@
 <?php
-include '../Includes/db.php';
+require_once __DIR__ . '/db.php';
 $err = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {      // runs only when the form is submitted
@@ -16,8 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {      // runs only when the form is s
         $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);   // never store the real password
         $st = $db->prepare("INSERT INTO users(student_id,email,password,full_name,college_id) VALUES(?,?,?,?,?)");
         $st->bind_param("ssssi", $sid, $email, $hash, $name, $college);
-        if ($st->execute()) go('auth/login.php');
-        else $err = 'That Student ID or email is already registered.';
+        try {
+            if ($st->execute()) go('login.php');
+            $err = 'That Student ID or email is already registered.';
+        } catch (mysqli_sql_exception $exception) {
+            $err = 'That Student ID or email is already registered.';
+        }
     }
 }
 
