@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/db.php';
 $id = (int)($_GET['id'] ?? 0);
-$st = $db->prepare("SELECT p.*,c.code college_code,(SELECT COALESCE(SUM(stock),0) FROM product_sizes WHERE product_id=p.id) stock FROM products p JOIN colleges c ON c.id=p.college_id WHERE p.id=?");
+$st = $db->prepare("SELECT p.*,c.code college_code,course.name course_name,(SELECT COALESCE(SUM(stock),0) FROM product_sizes WHERE product_id=p.id) stock FROM products p JOIN colleges c ON c.id=p.college_id LEFT JOIN courses course ON course.id=p.course_id WHERE p.id=? AND c.code IN ('CCICT','CAS','COE','COT','COED','CME')");
 $st->bind_param('i',$id); $st->execute(); $p = $st->get_result()->fetch_assoc();
 if (!$p) go('index.php');
 
@@ -11,7 +11,7 @@ head($p['name'], 'college.php?id=' . (int)$p['college_id']);
 ?>
 <section class="product-detail card">
   <div class="detail-visual"><span class="product-category"><?= e($p['category']) ?></span><span class="detail-monogram"><?= e(substr($p['college_code'],0,1)) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></div>
-  <div class="detail-copy"><p class="eyebrow"><?= e($p['college_code']) ?> · <?= e($p['category']) ?></p><h1><?= e($p['name']) ?></h1>
+  <div class="detail-copy"><p class="eyebrow"><?= e($p['college_code']) ?><?= $p['course_name'] ? ' · '.e($p['course_name']) : '' ?> · <?= e($p['category']) ?></p><h1><?= e($p['name']) ?></h1>
   <strong class="detail-price"><?= money($p['price']) ?></strong>
   <p class="detail-description"><?= e($p['description']) ?></p>
 

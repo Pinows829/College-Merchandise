@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/db.php';
 $q = trim($_GET['q'] ?? '');                       // what the student typed in search
-$colleges = $db->query("SELECT * FROM colleges");
+$colleges = $db->query("SELECT * FROM colleges WHERE code IN ('CCICT','CAS','COE','COT','COED','CME') ORDER BY FIELD(code,'CCICT','CAS','COE','COT','COED','CME')");
 
-$st = $db->prepare("SELECT p.*, c.code college_code, COALESCE(inv.stock,0) stock FROM products p JOIN colleges c ON c.id=p.college_id LEFT JOIN (SELECT product_id,SUM(stock) stock FROM product_sizes GROUP BY product_id) inv ON inv.product_id=p.id WHERE p.name LIKE ? ORDER BY p.id DESC LIMIT 12");
+$st = $db->prepare("SELECT p.*, c.code college_code, course.name course_name, COALESCE(inv.stock,0) stock FROM products p JOIN colleges c ON c.id=p.college_id LEFT JOIN courses course ON course.id=p.course_id LEFT JOIN (SELECT product_id,SUM(stock) stock FROM product_sizes GROUP BY product_id) inv ON inv.product_id=p.id WHERE c.code IN ('CCICT','CAS','COE','COT','COED','CME') AND p.name LIKE ? ORDER BY p.id DESC LIMIT 12");
 $like = "%$q%";
 $st->bind_param("s", $like);
 $st->execute();
@@ -28,7 +28,7 @@ head('College Merchandise');
   <?php while ($p = $products->fetch_assoc()): ?>
     <div class="card product-card">
       <a class="product-visual" href="product.php?id=<?= (int)$p['id'] ?>"><span class="product-category"><?= e($p['category']) ?></span><span class="product-mark"><?= e(substr($p['college_code'],0,1)) ?></span><span class="product-college"><?= e($p['college_code']) ?> COLLECTION</span></a>
-      <div class="product-info"><small><?= e($p['college_code']) ?> · <?= e($p['category']) ?></small><b><?= e($p['name']) ?></b><div class="product-bottom"><strong><?= money($p['price']) ?></strong><a class="round-link" aria-label="View <?= e($p['name']) ?>" href="product.php?id=<?= (int)$p['id'] ?>">↗</a></div></div>
+      <div class="product-info"><small><?= e($p['college_code']) ?><?= $p['course_name'] ? ' · '.e($p['course_name']) : '' ?> · <?= e($p['category']) ?></small><b><?= e($p['name']) ?></b><div class="product-bottom"><strong><?= money($p['price']) ?></strong><a class="round-link" aria-label="View <?= e($p['name']) ?>" href="product.php?id=<?= (int)$p['id'] ?>">↗</a></div></div>
     </div>
   <?php endwhile; ?>
 </div>

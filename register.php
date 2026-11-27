@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {      // runs only when the form is s
     }
 }
 
-$colleges = $db->query("SELECT * FROM colleges");
+$colleges = $db->query("SELECT * FROM colleges WHERE code IN ('CCICT','CAS','COE','COT','COED','CME') ORDER BY FIELD(code,'CCICT','CAS','COE','COT','COED','CME')");
 head('Create account');
 ?>
 <form class="form card" method="post">

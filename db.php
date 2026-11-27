@@ -34,11 +34,11 @@ function head($title, $back = null){ $u = me(); ?>
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title><?= e($title) ?> | College Merchandise</title>
+<title><?= e($title) ?> | CTUKolek!</title>
 <link rel="stylesheet" href="<?= BASE ?>/style.css">
 </head><body>
 <header class="bar"><div class="wrap bar-in">
-  <a class="brand" href="<?= BASE ?>/index.php"><span class="brand-mark">C</span><span>Campus<span class="brand-light">Merch</span></span></a>
+  <a class="brand" href="<?= BASE ?>/index.php"><span class="brand-mark">CK</span><span>CTU<span class="brand-light">Kolek!</span></span></a>
   <nav class="main-nav">
     <a href="<?= BASE ?>/index.php">Shop</a>
     <?php if ($u && $u['role'] === 'student'): ?>
@@ -47,6 +47,7 @@ function head($title, $back = null){ $u = me(); ?>
     <?php elseif ($u && $u['role'] === 'admin'): ?>
       <a href="<?= BASE ?>/admin/dashboard.php">Dashboard</a>
       <a href="<?= BASE ?>/admin/products.php">Products</a>
+      <a href="<?= BASE ?>/admin/courses.php">Courses</a>
       <a href="<?= BASE ?>/admin/orders.php">Orders</a>
     <?php endif; ?>
   </nav>
@@ -61,5 +62,5 @@ function head($title, $back = null){ $u = me(); ?>
 
 // bottom of every page
 function foot(){ ?>
-</main><footer class="site-footer"><div class="wrap footer-inner"><span>Campus<span class="footer-brand">Merch</span></span><small>College pride, made to wear.</small><small>© <?= date('Y') ?> CampusMerch</small></div></footer></body></html>
+</main><footer class="site-footer"><div class="wrap footer-inner"><span>CTU<span class="footer-brand">Kolek!</span></span><small>College pride, made to wear.</small><small>© <?= date('Y') ?> CTUKolek!</small></div></footer></body></html>
 <?php }

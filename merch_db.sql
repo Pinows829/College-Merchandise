@@ -14,6 +14,16 @@ CREATE TABLE IF NOT EXISTS colleges (
   UNIQUE KEY uq_colleges_code (code)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS courses (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  college_id INT UNSIGNED NOT NULL,
+  name VARCHAR(180) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_courses_college_name (college_id, name),
+  CONSTRAINT fk_courses_college FOREIGN KEY (college_id) REFERENCES colleges(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   student_id VARCHAR(40) NOT NULL,
@@ -33,6 +43,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS products (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   college_id INT UNSIGNED NOT NULL,
+  course_id INT UNSIGNED NULL,
   name VARCHAR(160) NOT NULL,
   category ENUM('Shirts','Jackets','Accessories') NOT NULL DEFAULT 'Shirts',
   description TEXT NOT NULL,
@@ -40,8 +51,11 @@ CREATE TABLE IF NOT EXISTS products (
   PRIMARY KEY (id),
   KEY idx_products_name (name),
   KEY idx_products_college (college_id),
+  KEY idx_products_course (course_id),
   CONSTRAINT fk_products_college FOREIGN KEY (college_id) REFERENCES colleges(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT fk_products_course FOREIGN KEY (course_id) REFERENCES courses(id)
+    ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT chk_products_price CHECK (price >= 0)
 ) ENGINE=InnoDB;
 
@@ -87,19 +101,19 @@ CREATE TABLE IF NOT EXISTS order_items (
 ) ENGINE=InnoDB;
 
 INSERT INTO colleges (code, name) VALUES
+  ('CCICT', 'College of Computing, Information and Communications Technology'),
   ('CAS', 'College of Arts and Sciences'),
-  ('CBA', 'College of Business Administration'),
-  ('CCS', 'College of Computing Studies'),
-  ('COE', 'College of Engineering');
+  ('COE', 'College of Engineering'),
+  ('COT', 'College of Technology'),
+  ('COED', 'College of Education'),
+  ('CME', 'College of Management and Entrepreneurship');
 
-INSERT INTO products (college_id, name, category, description, price) VALUES
-  (1, 'CAS College Shirt', 'Shirts', 'Comfortable college shirt for everyday wear.', 350.00),
-  (2, 'CBA College Shirt', 'Shirts', 'College shirt with a classic fit.', 350.00),
-  (3, 'CCS Hoodie', 'Jackets', 'Warm hoodie for students and alumni.', 850.00),
-  (4, 'COE Lanyard', 'Accessories', 'Durable college lanyard.', 120.00);
+INSERT INTO products (college_id, name, category, description, price)
+SELECT id, CONCAT(code, ' College Shirt'), 'Shirts', 'Comfortable college shirt for everyday wear.', 350.00
+FROM colleges WHERE code IN ('CCICT','CAS','COE','COT','COED','CME');
 
-INSERT INTO product_sizes (product_id, size, stock) VALUES
-  (1, 'S', 10), (1, 'M', 10), (1, 'L', 10), (1, 'XL', 5),
-  (2, 'S', 10), (2, 'M', 10), (2, 'L', 10), (2, 'XL', 5),
-  (3, 'S', 5), (3, 'M', 8), (3, 'L', 8), (3, 'XL', 4),
-  (4, 'One Size', 30);
+INSERT INTO product_sizes (product_id, size, stock)
+SELECT p.id, sizes.size, sizes.stock FROM products p
+JOIN colleges c ON c.id=p.college_id
+CROSS JOIN (SELECT 'S' size,10 stock UNION ALL SELECT 'M',10 UNION ALL SELECT 'L',10 UNION ALL SELECT 'XL',5) sizes
+WHERE p.name=CONCAT(c.code, ' College Shirt');
